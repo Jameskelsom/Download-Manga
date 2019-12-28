@@ -1,6 +1,7 @@
 import requests
 import os
 from bs4 import BeautifulSoup
+import re
 
 
 class downloadManga:
@@ -10,13 +11,21 @@ class downloadManga:
         manga = manga.replace(' ', '-')
         self.searchManga(manga)
 
-    def createDirectory(self, manga):
+    def downloadImg(self,url,manga):
+        response = requests.get(url)
+        if response.status_code == 200:
+            with open(manga +"/capa.jpg", 'wb') as f:
+                f.write(response.content)
+                print('Download da capa!!!')
+
+    def createDirectory(self):
         try:
-            os.mkdir(manga)
+            os.mkdir(self.manga)
         except:
             pass
 
     def searchManga(self, manga):
+        self.manga = manga
         r = requests
         url = self.url_base + '/titulos/' + manga
         response = r.get(url)
@@ -28,7 +37,8 @@ class downloadManga:
                     'Esta página foi removida, não existe mais, ou talvez nunca tenha existido!')
             else:
                 self.descriptionManga()
-                self.createDirectory(manga)
+                self.createDirectory()
+                self.loadLinks()
 
         else:
             print('Pagina não encontrada!!!')
@@ -54,13 +64,20 @@ class downloadManga:
         autor = self.clearString(bs.find(class_='ui relaxed list').find_all(class_='description')[3].get_text())
         status = self.clearString(bs.find(class_='ui relaxed list').find_all(class_='description')[6].get_text())
         genero = self.clearStringGenero(bs.find(class_='ui relaxed list').find_all(class_='description')[4].get_text())
+        capa = bs.find(class_='ui relaxed list').find_all(class_='description')[0].find('img')['src']
         self.displayMsg('Descrição', descricao)
         self.displayMsg('Ano', ano)
         self.displayMsg('Arte', arte)
         self.displayMsg('Autor', autor)
         self.displayMsg('Gênero', genero)
         self.displayMsg('Status', status)
+        self.downloadImg(capa,self.manga)
 
+    def loadLinks(self):
+        bs = self.bs
+        links=[]
+        [links.append(link['href']) for link in bs.find_all(href=re.compile('/titulos/'))]
+        return links
 
 manga = str(input('Digite o nome do manga: '))
 d = downloadManga()
