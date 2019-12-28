@@ -2,7 +2,9 @@ import requests
 import os
 from bs4 import BeautifulSoup
 import re
-
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from tqdm import tqdm
 
 class downloadManga:
     def setUp(self, manga):
@@ -10,6 +12,8 @@ class downloadManga:
         self.displayMsg('Manga', manga)
         manga = manga.replace(' ', '-')
         self.searchManga(manga)
+
+   
 
     def downloadImg(self,url,manga):
         response = requests.get(url)
@@ -75,9 +79,11 @@ class downloadManga:
 
     def loadLinks(self):
         bs = self.bs
+        self.driver = webdriver.Chrome()
         links=[]
         [links.append(link['href']) for link in bs.find_all(href=re.compile('/titulos/'))]
-        return links
+        for i in tqdm(range(len(links))):
+            self.driver.get(self.url_base + links[i])
 
 manga = str(input('Digite o nome do manga: '))
 d = downloadManga()
