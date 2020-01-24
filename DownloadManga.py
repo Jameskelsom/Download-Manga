@@ -69,7 +69,7 @@ class downloadManga:
         self.displayMsg('Status', status)
         self.downloadImg(capa,self.manga,'')
 
-    def loadLinks(self):
+    def loadLinks(self): #carregando todos os links
         links=[]
         [links.append(link['href']) for link in self.bs.find_all(href=re.compile('/titulos/'))]
         for i in tqdm(range(len(links))):
@@ -89,7 +89,7 @@ class downloadManga:
                 urlImg = urlSulfix + page +'.jpg'
                 self.downloadImg(url,self.manga,urlImg)
     
-    def downloadImg(self,url,manga,urldownload):
+    def downloadImg(self,url,manga,urldownload): #download das imagens
         if len(urldownload)==0:
             response = requests.get(url)
             if response.status_code == 200:
