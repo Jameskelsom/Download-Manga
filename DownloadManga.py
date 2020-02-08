@@ -2,7 +2,7 @@ import requests
 import os
 from bs4 import BeautifulSoup
 import re
-from tqdm import tqdm
+from tqdm import tqdm #progressbar
 import requests_cache #criar o cache de todos os requests
 
 requests_cache.install_cache('DownloadManga_cache')
