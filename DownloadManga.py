@@ -16,7 +16,7 @@ class downloadManga:
 
     def createDirectory(self):
         try:
-            os.mkdir(self.manga)
+            os.mkdir(self.manga) #criar pasta
         except:
             pass
 
