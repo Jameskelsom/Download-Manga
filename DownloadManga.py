@@ -1,5 +1,5 @@
 import requests
-import os
+import os #sistema ope
 from bs4 import BeautifulSoup #atualizado
 import re
 from tqdm import tqdm #progressbar
