@@ -1,6 +1,6 @@
 import requests
 import os
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup #atualizado
 import re
 from tqdm import tqdm #progressbar
 import requests_cache #criar o cache de todos os requests
